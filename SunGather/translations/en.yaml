@@ -139,16 +139,16 @@ configuration:
     description: "Register for solar production in Watts (default: total_active_power)"
   chargehq_register_consumption:
     name: Consumption Register
-    description: "Register for load consumption (default: load_power_hybrid, use load_power for SG* models)"
+    description: "Register for load consumption (default: load_power, use load_power_hybrid for SH* models)"
   chargehq_register_net_import:
     name: Net Import Register
-    description: "Register for grid import/export (default: export_power_hybrid, use meter_power for SG* models)"
+    description: "Register for grid import/export (default: meter_power, use export_power_hybrid for SH* models)"
   chargehq_register_battery_power:
     name: Battery Power Register
-    description: "Register for battery charge/discharge (SH* hybrid only - leave empty for SG* models)"
+    description: "SH* hybrid only: set to battery_power. Leave empty for SG* models."
   chargehq_register_battery_soc:
     name: Battery SOC Register
-    description: "Register for battery state of charge (SH* hybrid only - leave empty for SG* models)"
+    description: "SH* hybrid only: set to battery_level. Leave empty for SG* models."
   chargehq_invert_net_import:
     name: Invert Net Import
-    description: "Set to false if using meter_power (where positive = import)"
+    description: "Default: false for meter_power. Set to true if using export_power_hybrid (SH* models)"

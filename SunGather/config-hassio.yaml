@@ -144,8 +144,8 @@ exports:
     api_key: null
     push_interval: 60
     register_production: total_active_power
-    register_consumption: load_power_hybrid
-    register_net_import: export_power_hybrid
-    register_battery_power: battery_power
-    register_battery_soc: battery_level
-    invert_net_import: true
+    register_consumption: load_power
+    register_net_import: meter_power
+    register_battery_power: null
+    register_battery_soc: null
+    invert_net_import: false

@@ -160,11 +160,11 @@ options:
   chargehq_api_key: ""
   chargehq_push_interval: 60
   chargehq_register_production: "total_active_power"
-  chargehq_register_consumption: "load_power_hybrid"
-  chargehq_register_net_import: "export_power_hybrid"
-  chargehq_register_battery_power: "battery_power"
-  chargehq_register_battery_soc: "battery_level"
-  chargehq_invert_net_import: true
+  chargehq_register_consumption: "load_power"
+  chargehq_register_net_import: "meter_power"
+  chargehq_register_battery_power: ""
+  chargehq_register_battery_soc: ""
+  chargehq_invert_net_import: false
 schema:
   # Inverter Settings
   host: str
