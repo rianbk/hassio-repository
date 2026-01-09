@@ -1,0 +1,154 @@
+configuration:
+  host:
+    name: Inverter IP Address
+    description: IP address of your Sungrow inverter or WiNet dongle
+  port:
+    name: Port
+    description: Modbus port (default 502) or HTTP port (default 8082)
+  timeout:
+    name: Connection Timeout
+    description: Seconds to wait for inverter connection (default 10)
+  retries:
+    name: Connection Retries
+    description: Number of retry attempts if connection fails (default 3)
+  slave:
+    name: Modbus Slave ID
+    description: Modbus slave address (default 0x01)
+  scan_interval:
+    name: Scan Interval
+    description: Seconds between data polls (default 30)
+  connection:
+    name: Connection Type
+    description: "Protocol: 'modbus' for direct, 'sungrow' for encrypted WiNet, 'http' for HTTP API"
+  model:
+    name: Inverter Model
+    description: Override auto-detected model (leave empty for auto-detect)
+  serial:
+    name: Serial Number
+    description: Override auto-detected serial (leave empty for auto-detect)
+  smart_meter:
+    name: Smart Meter
+    description: Enable if your inverter supports grid/house consumption readings (not needed for hybrid models)
+  use_local_time:
+    name: Use Local Time
+    description: Use system time instead of inverter time for timestamps
+  log_console:
+    name: Console Log Level
+    description: Logging verbosity for console output
+  log_file:
+    name: File Log Level
+    description: Logging verbosity for file output
+  level:
+    name: Data Level
+    description: "Amount of data to gather: 0=Basic, 1=Standard, 2=Extended, 3=All registers"
+  console_enabled:
+    name: Enable Console Output
+    description: Print register values to console (useful for debugging)
+  webserver_enabled:
+    name: Enable Web UI
+    description: Run the built-in web interface showing collected data
+  webserver_port:
+    name: Web UI Port
+    description: Port for the web interface (default 8099)
+  custom_mqtt_server:
+    name: Use Custom MQTT Server
+    description: Disable to auto-discover Home Assistant's MQTT broker
+  mqtt_host:
+    name: MQTT Host
+    description: MQTT broker hostname/IP (only when using custom server)
+  mqtt_port:
+    name: MQTT Port
+    description: MQTT broker port (default 1883)
+  mqtt_username:
+    name: MQTT Username
+    description: MQTT authentication username
+  mqtt_password:
+    name: MQTT Password
+    description: MQTT authentication password
+  mqtt_topic:
+    name: MQTT Topic
+    description: "Custom topic (default: SunGather/{serial_number})"
+  mqtt_client_id:
+    name: MQTT Client ID
+    description: Custom MQTT client identifier
+  mqtt_homeassistant:
+    name: Home Assistant Auto-Discovery
+    description: Enable MQTT auto-discovery for Home Assistant
+  mqtt_ha_sensors:
+    name: Custom HA Sensors (YAML)
+    description: "YAML array of custom sensor definitions. Tip: Use 'Edit in YAML' mode (top-right menu) for easier editing"
+  influxdb_enabled:
+    name: Enable InfluxDB Export
+    description: Send data to InfluxDB time-series database
+  influxdb_url:
+    name: InfluxDB URL
+    description: "InfluxDB server URL (e.g., http://localhost:8086)"
+  influxdb_token:
+    name: InfluxDB Token
+    description: API token for InfluxDB v2.x authentication
+  influxdb_username:
+    name: InfluxDB Username
+    description: Username for InfluxDB v1.8 authentication
+  influxdb_password:
+    name: InfluxDB Password
+    description: Password for InfluxDB v1.8 authentication
+  influxdb_org:
+    name: InfluxDB Organization
+    description: Organization name (InfluxDB v2.x only)
+  influxdb_bucket:
+    name: InfluxDB Bucket
+    description: Bucket/database name for storing data
+  influxdb_measurements:
+    name: InfluxDB Measurements (YAML)
+    description: "YAML array of measurements to export. Tip: Use 'Edit in YAML' mode for easier editing"
+  pvoutput_enabled:
+    name: Enable PVOutput Export
+    description: Upload data to PVOutput.org
+  pvoutput_api:
+    name: PVOutput API Key
+    description: Your PVOutput API key (Settings > API Key)
+  pvoutput_sid:
+    name: PVOutput System ID
+    description: Your PVOutput System ID
+  pvoutput_join_team:
+    name: Join SunGather Team
+    description: Join the SunGather team on PVOutput
+  pvoutput_rate_limit:
+    name: PVOutput Rate Limit
+    description: Seconds between uploads (60 standard, 300 for donors)
+  pvoutput_cumulative_flag:
+    name: Cumulative Flag
+    description: "Set to 1 if using v2 & v4, set to 2 if using v1 only"
+  pvoutput_batch_points:
+    name: Batch Points
+    description: Number of data points to batch before uploading
+  pvoutput_parameters:
+    name: PVOutput Parameters (YAML)
+    description: "YAML array of PVOutput parameter mappings. Tip: Use 'Edit in YAML' mode for easier editing"
+  chargehq_enabled:
+    name: Enable ChargeHQ Export
+    description: Push data to ChargeHQ for EV charging optimization
+  chargehq_api_key:
+    name: ChargeHQ API Key
+    description: API key from ChargeHQ app (My Equipment > Push API)
+  chargehq_push_interval:
+    name: ChargeHQ Push Interval
+    description: Seconds between pushes (minimum 30)
+  chargehq_register_production:
+    name: Production Register
+    description: "Register for solar production in Watts (default: total_active_power)"
+  chargehq_register_consumption:
+    name: Consumption Register
+    description: "Register for load consumption (default: load_power_hybrid, use load_power for SG* models)"
+  chargehq_register_net_import:
+    name: Net Import Register
+    description: "Register for grid import/export (default: export_power_hybrid, use meter_power for SG* models)"
+  chargehq_register_battery_power:
+    name: Battery Power Register
+    description: "Register for battery charge/discharge (SH* hybrid only - leave empty for SG* models)"
+  chargehq_register_battery_soc:
+    name: Battery SOC Register
+    description: "Register for battery state of charge (SH* hybrid only - leave empty for SG* models)"
+  chargehq_invert_net_import:
+    name: Invert Net Import
+    description: "Set to false if using meter_power (where positive = import)"

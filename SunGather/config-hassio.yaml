@@ -1,28 +1,41 @@
+# SunGather Configuration for Home Assistant Add-on
 # For full configuration options see: https://github.com/bohdan-s/SunGather/blob/main/SunGather/config-example.yaml
 inverter:
   host: null
+  port: 502
+  timeout: 10
+  retries: 3
+  slave: 0x01
   scan_interval: 30
   connection: modbus
+  # model: null
+  # serial: null
   smart_meter: true
-  log_console: INFO
+  use_local_time: true
+  log_console: "INFO"
+  log_file: "OFF"
   level: 1
-  # port: 502
-  # timeout: 10
-  # retries: 3
-  # model: xxxxxxx
-  # serial: xxxxxxxxxx
+
 exports:
+  # Print Registers to console, good for debugging / troubleshooting
+  - name: console
+    enabled: false
+
+  # Runs a simple Webserver showing Config and last read registers
   - name: webserver
-    enabled: True
+    enabled: true
     port: 8099
+
+  # Publish Registers to MQTT / Home Assistant
   - name: mqtt
-    enabled: True
+    enabled: true
     host: null
     port: 1883
     username: null
     password: null
     # topic: "SunGather/{serial_number}"
-    homeassistant: True
+    # client_id: null
+    homeassistant: true
     ha_sensors:
       - name: "Daily Generation"
         sensor_type: sensor
@@ -73,3 +86,66 @@ exports:
         dev_class: power
         state_class: measurement
         icon: "mdi:transmission-tower-import"
+
+  # Home Assistant direct integration
+  - name: hassio
+    enabled: false
+    api_url: "http://supervisor/core/api"
+    token: null
+
+  # Output data to InfluxDB
+  - name: influxdb
+    enabled: false
+    url: "http://localhost:8086"
+    token: null
+    username: null
+    password: null
+    org: "Default"
+    bucket: "SunGather"
+    measurements:
+      - point: "power"
+        register: daily_power_yields
+      - point: "power"
+        register: total_active_power
+      - point: "power"
+        register: load_power
+      - point: "power"
+        register: meter_power
+      - point: "power"
+        register: export_to_grid
+      - point: "power"
+        register: import_from_grid
+      - point: "temp"
+        register: internal_temperature
+
+  # Publish Registers to PVOutput
+  - name: pvoutput
+    enabled: false
+    api: null
+    sid: null
+    join_team: true
+    rate_limit: 60
+    cumulative_flag: 2
+    batch_points: 1
+    parameters:
+      - name: v1
+        register: daily_power_yields
+        multiple: 1000
+      - name: v2
+        register: total_active_power
+      - name: v4
+        register: load_power
+      - name: v6
+        register: phase_a_voltage
+
+  # Push data to ChargeHQ for EV charging optimization
+  - name: chargehq
+    enabled: false
+    api_key: null
+    push_interval: 60
+    register_production: total_active_power
+    register_consumption: load_power_hybrid
+    register_net_import: export_power_hybrid
+    register_battery_power: battery_power
+    register_battery_soc: battery_level
+    invert_net_import: true

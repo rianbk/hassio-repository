@@ -1,8 +1,8 @@
 name: "SunGather"
-version: "0.1.4"
+version: "0.1.5"
 slug: sungather
 description: "Extract Sungrow data from local Inverter"
-arch: 
+arch:
   - armhf
   - armv7
   - aarch64
@@ -17,23 +17,212 @@ discovery:
   - "mqtt"
 services:
   - "mqtt:need"
-map: 
+map:
   - share:rw
-options: 
-  host: 192.168.1.100
+options:
+  # Inverter Settings
+  host: "CHANGE_ME"
+  port: 502
   timeout: 10
+  retries: 3
+  slave: 1
   scan_interval: 30
   connection: "modbus"
-  smart_meter: True
-  custom_mqtt_server: False
+  model: ""
+  serial: ""
+  smart_meter: true
+  use_local_time: true
   log_console: "INFO"
+  log_file: "OFF"
+  level: 1
+  # Console Export
+  console_enabled: false
+  # Webserver Export
+  webserver_enabled: true
+  webserver_port: 8099
+  # MQTT Settings
+  custom_mqtt_server: false
+  mqtt_host: ""
+  mqtt_port: 1883
+  mqtt_username: ""
+  mqtt_password: ""
+  mqtt_topic: "SunGather/{serial_number}"
+  mqtt_client_id: ""
+  mqtt_homeassistant: true
+  mqtt_ha_sensors: |
+    - name: "Daily Generation"
+      sensor_type: sensor
+      register: daily_power_yields
+      device_class: energy
+      state_class: total_increasing
+      icon: "mdi:solar-power"
+    - name: "Daily Export to Grid"
+      sensor_type: sensor
+      register: daily_export_to_grid
+      device_class: energy
+      state_class: total_increasing
+      icon: "mdi:transmission-tower-export"
+    - name: "Daily Import from Grid"
+      sensor_type: sensor
+      register: daily_import_from_grid
+      device_class: energy
+      state_class: total_increasing
+      icon: "mdi:transmission-tower-import"
+    - name: "Temperature"
+      sensor_type: sensor
+      register: internal_temperature
+      device_class: temperature
+      state_class: measurement
+    - name: "Power State"
+      sensor_type: binary_sensor
+      register: run_state
+      device_class: running
+      payload_on: "ON"
+      payload_off: "OFF"
+    - name: "Active Generation"
+      sensor_type: sensor
+      register: total_active_power
+      device_class: power
+      state_class: measurement
+      icon: "mdi:solar-power"
+    - name: "Active Export to Grid"
+      sensor_type: sensor
+      register: export_to_grid
+      device_class: power
+      state_class: measurement
+      icon: "mdi:transmission-tower-export"
+    - name: "Active Import from Grid"
+      sensor_type: sensor
+      register: import_from_grid
+      device_class: power
+      state_class: measurement
+      icon: "mdi:transmission-tower-import"
+  # InfluxDB Export
+  influxdb_enabled: false
+  influxdb_url: "http://localhost:8086"
+  influxdb_token: ""
+  influxdb_username: ""
+  influxdb_password: ""
+  influxdb_org: "Default"
+  influxdb_bucket: "SunGather"
+  influxdb_measurements: |
+    - point: "power"
+      register: daily_power_yields
+    - point: "power"
+      register: total_active_power
+    - point: "power"
+      register: load_power
+    - point: "power"
+      register: meter_power
+    - point: "power"
+      register: export_to_grid
+    - point: "power"
+      register: import_from_grid
+    - point: "temp"
+      register: internal_temperature
+  # PVOutput Export
+  pvoutput_enabled: false
+  pvoutput_api: ""
+  pvoutput_sid: ""
+  pvoutput_rate_limit: 60
+  pvoutput_cumulative_flag: 2
+  pvoutput_batch_points: 1
+  pvoutput_parameters: |
+    - name: v1
+      register: daily_power_yields
+      multiple: 1000
+    - name: v2
+      register: total_active_power
+    #- name: v3
+    #  register: (Energy Consumption)
+    - name: v4
+      register: load_power
+    #- name: v5
+    #  register: internal_temperature
+    - name: v6
+      register: phase_a_voltage
+    # Extended values v7-v12 (Donation Only)
+    #- name: v7
+    #  register:
+    #- name: v8
+    #  register:
+    #- name: v9
+    #  register:
+    #- name: v10
+    #  register:
+    #- name: v11
+    #  register:
+    #- name: v12
+    #  register:
+  pvoutput_join_team: true
+  # ChargeHQ Export
+  chargehq_enabled: false
+  chargehq_api_key: ""
+  chargehq_push_interval: 60
+  chargehq_register_production: "total_active_power"
+  chargehq_register_consumption: "load_power_hybrid"
+  chargehq_register_net_import: "export_power_hybrid"
+  chargehq_register_battery_power: "battery_power"
+  chargehq_register_battery_soc: "battery_level"
+  chargehq_invert_net_import: true
 schema:
+  # Inverter Settings
   host: str
-  timeout: int(3,60)?
-  scan_interval: int(5,600)?
+  port: "port?"
+  timeout: "int(1,60)?"
+  retries: "int(1,10)?"
+  slave: "int?"
+  scan_interval: "int(5,600)?"
   connection: "list(sungrow|modbus|http)"
+  model: "str?"
+  serial: "str?"
   smart_meter: bool
-  custom_mqtt_server: bool
+  use_local_time: "bool?"
   log_console: "list(OFF|INFO|WARNING|ERROR|DEBUG)?"
+  log_file: "list(OFF|INFO|WARNING|ERROR|DEBUG)?"
+  level: "int(0,3)?"
+  # Console Export
+  console_enabled: "bool?"
+  # Webserver Export
+  webserver_enabled: "bool?"
+  webserver_port: "port?"
+  # MQTT Export
+  custom_mqtt_server: bool
+  mqtt_host: "str?"
+  mqtt_port: "port?"
+  mqtt_username: "str?"
+  mqtt_password: "password?"
+  mqtt_topic: "str?"
+  mqtt_client_id: "str?"
+  mqtt_homeassistant: "bool?"
+  mqtt_ha_sensors: "str?"
+  # InfluxDB Export
+  influxdb_enabled: "bool?"
+  influxdb_url: "url?"
+  influxdb_token: "str?"
+  influxdb_username: "str?"
+  influxdb_password: "password?"
+  influxdb_org: "str?"
+  influxdb_bucket: "str?"
+  influxdb_measurements: "str?"
+  # PVOutput Export
+  pvoutput_enabled: "bool?"
+  pvoutput_api: "str?"
+  pvoutput_sid: "str?"
+  pvoutput_rate_limit: "int(60,300)?"
+  pvoutput_cumulative_flag: "int(1,2)?"
+  pvoutput_batch_points: "int(1,12)?"
+  pvoutput_parameters: "str?"
+  pvoutput_join_team: "bool?"
+  # ChargeHQ Export
+  chargehq_enabled: "bool?"
+  chargehq_api_key: "str?"
+  chargehq_push_interval: "int(30,600)?"
+  chargehq_register_production: "str?"
+  chargehq_register_consumption: "str?"
+  chargehq_register_net_import: "str?"
+  chargehq_register_battery_power: "str?"
+  chargehq_register_battery_soc: "str?"
+  chargehq_invert_net_import: "bool?"
 panel_icon: mdi:SolarPowerVariant
 init: false

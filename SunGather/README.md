@@ -32,15 +32,15 @@
  
 Has HomeAssistant out of the box!
 
-If you want more functionality you can edit the /share/config.yaml file, see <a href="https://github.com/bohdan-s/SunGather/blob/main/SunGather/config-example.yaml">https://github.com/bohdan-s/SunGather/blob/main/SunGather/config-example.yaml</a>
-* Console - Log directly to screen
-* MQTT - Generic MQTT Support
-* PVOutput - Load into PVOutput.org
-* InfluxDB - Load data directly into InfluxDB (v1.8 or v2.x)
-* Prometheus - Scrape from /metrics endpoint
-* Simple webserver showing collected data
-* Rasberry Pi Docker support
-* and more coming....
+All configuration options are available directly in the add-on UI:
+* **MQTT** - Auto-discovers Home Assistant's broker, or use a custom server
+* **PVOutput** - Upload to PVOutput.org
+* **InfluxDB** - Export to InfluxDB (v1.8 or v2.x)
+* **ChargeHQ** - Push data for EV charging optimization
+* **Console** - Log registers to console for debugging
+* **Webserver** - Built-in web UI showing collected data
+
+For advanced customization of sensors, measurements, and parameters, use the YAML text fields in the configuration (tip: use "Edit in YAML" mode for easier editing).
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
